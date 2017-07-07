@@ -85,9 +85,15 @@ And a CloudWatch Scheduled Event Rule to invoke it every 15 minutes:
 
 ![Schedule](Schedule.png)
 
+## Checking that the module is running
+
 Once running, you can check the CloudWatch Logs for the Lambda function, which should show you detail about canary messages being sent:
 
 ![Logs](Logs.png)
+
+## Making changes
+
+You are very welcome to make changes to the module, and we're always keen to accept pull requests. If you do make changes to the codebase, you can then build a new version of the Lambda jar with `mvn package`, which will create a new deployable jar in the `./target` folder. It is reocmmended if you do this that you update the version number in the `pom.xml` so that your jar has a new version.
 
 ----
 
