@@ -6,6 +6,11 @@ Parameters:
     Description: Name of the Kinesis Stream to send messages to
     Type: String
     AllowedPattern: .*
+  MessageFrequency:
+    Default: 60
+    Description: Interval (minutes) at which to send messages
+    Type: Number
+    MinValue: 2
   StreamRegion:
     Default: us-east-1
     Description: Region where the Kinesis Stream exists
@@ -47,7 +52,7 @@ Resources:
         Timer:
           Type: Schedule
           Properties:
-            Schedule: rate(1 hour)
+            Schedule: !Sub rate(${MessageFrequency} minutes)
             Input: 
               !Sub | 
                 {

@@ -21,7 +21,7 @@ A few key points are needed to understand the workflow:
 
     where you provide the `streamName` to send messages to, in the `regionName` where the Stream has been created.
 	
-    `messagePrototype` is a special optional field that allows you to inject special characters that your down-stream processing functions will recognise and know that they shouldn't attempt to deserialise. If you don't provide a `messagePrototype`, then an empty-string message will be sent.
+    `messagePrototype` is a special optional field that allows you to inject special characters that your down-stream processing functions will recognise and know that they shouldn't attempt to deserialise. If you don't provide a `messagePrototype`, then an empty-string message will be sent. The module will send messages every 60 minutes by default, but you can change the frequency when deploying.
 
 2. The function connects to Amazon Kinesis in the specified region, and extracts all the currently open [Shards](http://docs.aws.amazon.com/streams/latest/dev/key-concepts.html) that are being used for processing.
 3. The function pushes messages to the Stream using PutRecords. It ensurese that every Shard receives a message by setting the [ExplicitHashKey](http://docs.aws.amazon.com/kinesis/latest/APIReference/API_PutRecord.html) for the message to the Shard's starting hash value
@@ -57,7 +57,7 @@ This will load the template into the CloudFormation Web Console. Click 'Next' to
 
 ![ConfigureStack](ConfigureStack.png)
 
-The stack name has been preconfigured to a descriptive value, but you can change this should you wish to. Then add the Message Prototype text, the name of the Kinesis Stream and the region where the Stream is deployed. Please note that this configuration can run across AWS Regions. Click 'Next' to go to the next screen:
+The stack name has been preconfigured to a descriptive value, but you can change this should you wish to. Then add the Message Prototype text, the name of the Kinesis Stream, the AWS Region where the Stream is deployed, and the frequency, in minutes, that the module should send messages. Please note that this configuration can run across AWS Regions. Click 'Next' to go to the next screen:
 
 ![TagsAndRole](TagsAndRole.png)
 
