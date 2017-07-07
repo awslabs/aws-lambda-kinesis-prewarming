@@ -85,6 +85,10 @@ And a CloudWatch Scheduled Event Rule to invoke it every 15 minutes:
 
 ![Schedule](Schedule.png)
 
+Once running, you can check the CloudWatch Logs for the Lambda function, which should show you detail about canary messages being sent:
+
+![Logs](Logs.png)
+
 ----
 
 AWS Lambda Kinesis Prewarming
