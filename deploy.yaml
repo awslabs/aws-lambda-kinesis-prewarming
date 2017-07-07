@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  StreamName:
+    Default: My Stream
+    Description: Name of the Kinesis Stream to send messages to
+    Type: String
+    AllowedPattern: .*
+  StreamRegion:
+    Default: us-east-1
+    Description: Region where the Kinesis Stream exists
+    Type: String
+    AllowedValues:
+        - ap-south-1
+        - eu-west-2
+        - eu-west-1
+        - ap-northeast-2
+        - ap-northeast-1
+        - sa-east-1
+        - ca-central-1
+        - ap-southeast-1
+        - ap-southeast-2
+        - eu-central-1
+        - us-east-1
+        - us-east-2
+        - us-west-1
+        - us-west-2
+  MessagePrototype:
+    Default: Test Message
+    Description: Message Template to use for sent messages
+    Type: String
+Resources:
+  ScheduledFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.services.kinesis.lambda.prewarming.LambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri:         
+        Bucket: !Sub awslabs-code-${AWS::Region}
+        Key: KinesisLambdaPrewarming/kinesis-prewarming-1.0.0.jar
+      MemorySize: 192
+      Timeout: 60
+      Tags:
+        Name: KinesisLambdaPrewarmer
+      Role: !GetAtt ScheduledServiceIAMRole.Arn
+      Events:
+        Timer:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Input: 
+              !Sub | 
+                {
+                    "streamName":"${StreamName}",
+                    "regionName":"${StreamRegion}",
+                    "messagePrototype":"${MessagePrototype}"
+                }                
+  ScheduledServiceIAMRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+        Path: "/"
+        ManagedPolicyArns:
+            - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            -
+              Sid: "AllowLambdaServiceToAssumeRole"
+              Effect: "Allow"
+              Action:
+                - "sts:AssumeRole"
+              Principal:
+                Service:
+                  - "lambda.amazonaws.com"
+        Policies:
+          -
+            PolicyName: "KinesisPermission"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                -
+                  Effect: "Allow"
+                  Action:
+                    - "kinesis:DescribeStream"
+                    - "kinesis:ListStreams"
+                    - "kinesis:PutRecord"
+                    - "kinesis:PutRecords"
+                  Resource: "*"
