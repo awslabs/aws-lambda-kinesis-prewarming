@@ -38,7 +38,7 @@ Resources:
   ScheduledFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.amazonaws.services.kinesis.lambda.prewarming.LambdaHandler::handleRequest
+      Handler: com.amazonaws.services.lambda.kinesis.prewarming.LambdaHandler::handleRequest
       Runtime: java8
       CodeUri:         
         Bucket: !Sub awslabs-code-${AWS::Region}
