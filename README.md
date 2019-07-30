@@ -16,7 +16,10 @@ A few key points are needed to understand the workflow:
 
     ``` 
     {
-     "streamName": "MyStream",     "regionName": "MyStreamRegion",     "messagePrototype": "InputMessage"    }
+     "streamName": "MyStream",
+     "regionName": "MyStreamRegion",
+     "messagePrototype": "InputMessage"
+    }
     ```
 
     where you provide the `streamName` to send messages to, in the `regionName` where the Stream has been created.
@@ -101,4 +104,4 @@ AWS Lambda Kinesis Prewarming
 
 Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
-Amazon Software License: https://aws.amazon.com/asl
+This library is licensed under the Apache 2.0 License.
